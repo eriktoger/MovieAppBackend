@@ -13,7 +13,6 @@ const userCredentials = {
 
 describe("User tests", () => {
   test("User can sign up", async () => {
-    console.log("here");
     const res = await request(app).post("/user/create").send(userCredentials);
     expect(res.body?.name).toBe("name");
     expect(res.body?.token).toBeDefined();
