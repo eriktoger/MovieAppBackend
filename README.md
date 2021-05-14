@@ -1,4 +1,6 @@
-The backend for my movie app: https://github.com/eriktoger/MovieApp
+This is the backend for the  movie app.
+
+Link to frontend repo: https://github.com/eriktoger/MovieApp
 
 Start the backend:
 npm start
