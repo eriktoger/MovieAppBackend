@@ -1,6 +1,6 @@
 const app = require("./app");
 const port = 4000;
-const connectDB = require("./db");
+const connectDB = require("./db/db.js");
 connectDB();
 
 app.listen(port, () => {

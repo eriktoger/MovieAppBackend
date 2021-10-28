@@ -2,6 +2,8 @@ const db = require("./memoryDB");
 const request = require("supertest");
 const app = require("../app");
 const axios = require("axios");
+const { redisClient } = require("../db/redis");
+const redis = require("../db/redis");
 
 const userCredentials = {
   name: "name",
@@ -29,7 +31,10 @@ const movie = {
   imdbID: "imdbId",
   Plot: "plot",
 };
+
 jest.mock("axios");
+jest.mock("../db/redis");
+
 describe("Movie tests", () => {
   test("User can get movie", async () => {
     axios.get.mockResolvedValue({ data: movie });
@@ -40,6 +45,7 @@ describe("Movie tests", () => {
   });
 
   test("Error message on movie not found", async () => {
+    redis.getAsync.mockResolvedValue(null);
     axios.get.mockResolvedValue({ data: null });
     const res = await request(app)
       .get("/movie/title")
@@ -64,5 +70,14 @@ describe("Movie tests", () => {
       .auth(token, { type: "bearer" });
     expect(res.status).toBe(500);
     expect(res.body).toStrictEqual({ error: "Movie search failed" });
+  });
+
+  test("Get movie if it is in cache", async () => {
+    redis.getAsync.mockResolvedValue(JSON.stringify(movie));
+    const res = await request(app)
+      .get("/movie/title")
+      .auth(token, { type: "bearer" });
+    expect(res.status).toBe(200);
+    expect(res.body).toStrictEqual(movie);
   });
 });

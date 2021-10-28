@@ -21,7 +21,7 @@ afterEach(async () => await db.clearDatabase());
 afterAll(async () => await db.close());
 
 const favorite = { title: "title", imdbID: "imdbID" };
-
+jest.mock("../db/redis");
 describe("Favorite tests", () => {
   test("User cannot add favorite without token", async () => {
     const res = await request(app)

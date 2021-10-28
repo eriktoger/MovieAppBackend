@@ -10,7 +10,7 @@ const userCredentials = {
   name: "name",
   password: "password",
 };
-
+jest.mock("../db/redis");
 describe("User tests", () => {
   test("User can sign up", async () => {
     const res = await request(app).post("/user/create").send(userCredentials);
